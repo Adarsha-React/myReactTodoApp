@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Header from "./components/Header";
+import Body from "./components/Body";
+import About from "./components/About";
+import { Outlet, createBrowserRouter } from "react-router-dom";
+import Services from "./components/Services";
+import UserContext from "./contexts/UserContext";
+import { Provider } from "react-redux";
+import appStore from "./redux/appStore";
+import Todo from "./components/Todo";
 
-function App() {
+export function App() {
+  const user = {
+    name: "Adarsha",
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Provider store={appStore}>
+        <Header />
+        <UserContext.Provider value={user}>
+          <Outlet />
+        </UserContext.Provider>
+      </Provider>
     </div>
   );
 }
+
+export const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <Body />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/services",
+        element: <Services />,
+      },
+      {
+        path: "/todo",
+        element: <Todo />,
+      },
+    ],
+  },
+]);
 
 export default App;
